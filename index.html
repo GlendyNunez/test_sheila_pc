@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test de Ciències - Sheila</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🔬 Test de Repàs: La Cèl·lula, les Lents i el Microscopi</h1>
+      <p class="subtitle">Basat en els apunts de classe</p>
+      <div class="progress-bar-container">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+    </header>
+
+    <main>
+      <!-- BLOC 1 -->
+      <section class="card">
+        <h2>Bloc 1: Preguntes tipus test</h2>
+        <p class="section-desc">Tria l'opció correcta per a cada pregunta.</p>
+        <div id="quiz-container"></div>
+      </section>
+
+      <!-- BLOC 2 -->
+      <section class="card">
+        <h2>Bloc 2: Parts del microscopi (Relacionar)</h2>
+        <p class="section-desc">Selecciona la funció que correspon a cada part del microscopi òptic.</p>
+        <div id="matching-container"></div>
+      </section>
+
+      <!-- BLOC 3 -->
+      <section class="card">
+        <h2>Bloc 3: Història i definicions curtes</h2>
+        <p class="section-desc">Completa els espais i respon amb les paraules clau dels apunts.</p>
+
+        <div class="short-question">
+          <label for="q-janssen">1. Qui va inventar el microscopi òptic i en quin any (segons els apunts / real)?</label>
+          <input type="text" id="q-janssen" placeholder="Ex: Germans Janssen, 1590 (o 1950)">
+          <div class="feedback" id="fb-janssen"></div>
+        </div>
+
+        <div class="short-question">
+          <label for="q-hooke">2. Qui va descobrir les cèl·lules l'any 1665?</label>
+          <input type="text" id="q-hooke" placeholder="Nom i cognom">
+          <div class="feedback" id="fb-hooke"></div>
+        </div>
+
+        <div class="short-question">
+          <label for="q-leeuwenhoek">3. Qui va observar microorganismes més tard?</label>
+          <input type="text" id="q-leeuwenhoek" placeholder="Cognom del científic">
+          <div class="feedback" id="fb-leeuwenhoek"></div>
+        </div>
+
+        <div class="short-question">
+          <label for="q-mitocondri">4. Què és el mitocondri i quina és la seva funció principal?</label>
+          <input type="text" id="q-mitocondri" placeholder="Ex: Central respiratòria, produeix energia (ATP)...">
+          <div class="feedback" id="fb-mitocondri"></div>
+        </div>
+
+        <div class="short-question">
+          <label for="q-citoesquelet">5. De què està format el citoesquelet?</label>
+          <input type="text" id="q-citoesquelet" placeholder="Ex: Conjunt de...">
+          <div class="feedback" id="fb-citoesquelet"></div>
+        </div>
+      </section>
+
+      <div class="actions">
+        <button id="btn-check" class="btn-primary">Corregir Examen</button>
+        <button id="btn-reset" class="btn-secondary">Tornar a començar</button>
+      </div>
+
+      <!-- RESULTATS -->
+      <section id="results-section" class="card results hidden">
+        <h2>📊 Resultats del Test</h2>
+        <div class="score-box">
+          <span id="score-number">0</span> / 10
+        </div>
+        <p id="score-message"></p>
+        <div id="mistakes-summary"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
