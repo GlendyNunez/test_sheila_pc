@@ -3,6 +3,14 @@ let isCorrected = false;
 
 const uiStrings = {
   ca: {
+    tabExamOne: "Examen 1",
+    tabExamTwo: "Examen 2",
+    examTwoTitle: "Examen 2: Preguntes obertes",
+    examTwoDesc: "Respon amb les teves paraules. Pots escriure en català o castellà.",
+    btnCheckTwo: "Corregir Examen 2",
+    btnResetTwo: "Esborrar respostes",
+    examTwoResTitle: "Resultats de l'Examen 2",
+    openPlaceholder: "Escriu la resposta amb les teves paraules...",
     btnLang: "🌐 Traduir al Castellà",
     title: "🔬 Test de Repàs: La Cèl·lula, les Lents i el Microscopi",
     subtitle: "Basat en els apunts de classe",
@@ -40,6 +48,14 @@ const uiStrings = {
     mistakesHeading: (n) => `Punts per repassar (${n}):`
   },
   es: {
+    tabExamOne: "Examen 1",
+    tabExamTwo: "Examen 2",
+    examTwoTitle: "Examen 2: Preguntas abiertas",
+    examTwoDesc: "Responde con tus palabras. Puedes escribir en catalán o castellano.",
+    btnCheckTwo: "Corregir Examen 2",
+    btnResetTwo: "Borrar respuestas",
+    examTwoResTitle: "Resultados del Examen 2",
+    openPlaceholder: "Escribe la respuesta con tus palabras...",
     btnLang: "🌐 Traducir al Catalán",
     title: "🔬 Test de Repaso: La Célula, las Lentes y el Microscopio",
     subtitle: "Basado en los apuntes de clase",
@@ -519,12 +535,388 @@ const shortChecks = [
   }
 ];
 
+const examTwoData = [
+  {
+    id: "e2-q1",
+    q: { ca: "1. Què és una cèl·lula i quines són les seves tres funcions vitals?", es: "1. ¿Qué es una célula y cuáles son sus tres funciones vitales?" },
+    required: {
+      ca: [["unicitat", "unitat"], ["nutrir", "alimentar"], ["relacionar"], ["reproduir"]],
+      es: [["unidad", "unica", "única"], ["nutrir", "alimentar"], ["relacionar"], ["reproduir"]]
+    },
+    model: { ca: "És la unitat més petita de l'organisme i s'alimenta, es relaciona i es reprodueix.", es: "Es la unidad más pequeña del organismo y se alimenta, se relaciona y se reproduce." }
+  },
+  {
+    id: "e2-q2",
+    q: { ca: "2. Explica les quatre parts bàsiques que trobem en una cèl·lula.", es: "2. Explica las cuatro partes básicas que encontramos en una célula." },
+    required: {
+      ca: [["membrana"], ["citoplasma"], ["organuls", "orgànuls"], ["nucli"]],
+      es: [["membrana"], ["citoplasma"], ["orgánulos", "organulos"], ["núcleo", "nucleo"]]
+    },
+    model: { ca: "Membrana cel·lular, citoplasma, orgànuls i nucli.", es: "Membrana celular, citoplasma, orgánulos y núcleo." }
+  },
+  {
+    id: "e2-q3",
+    q: { ca: "3. Quina diferència principal hi ha entre una cèl·lula procariota i una cèl·lula eucariota?", es: "3. ¿Qué diferencia principal hay entre una célula procariota y una célula eucariota?" },
+    required: {
+      ca: [["sense membrana nuclear", "no te membrana nuclear", "dna dispers"], ["te membrana nuclear", "amb membrana nuclear"]],
+      es: [["sin membrana nuclear", "no tiene membrana nuclear", "adn disperso"], ["con membrana nuclear", "tiene membrana nuclear"]]
+    },
+    model: { ca: "La procariota no té membrana nuclear i el material genètic està dispers; l'eucariota sí en té.", es: "La procariota no tiene membrana nuclear y el material genético está disperso; la eucariota sí tiene." }
+  },
+  {
+    id: "e2-q4",
+    q: { ca: "4. Quants orgànuls té una cèl·lula procariota i quin és?", es: "4. ¿Cuántos orgánulos tiene una célula procariota y cuál es?" },
+    required: {
+      ca: [["un orgànul", "un organul", "nomes un", "solament un"], ["ribosoma"]],
+      es: [["un orgánulo", "un organulo", "solo un", "solamente un"], ["ribosoma"]]
+    },
+    model: { ca: "La procariota té un sol orgànul: el ribosoma.", es: "La procariota tiene un solo orgánulo: el ribosoma." }
+  },
+  {
+    id: "e2-q5",
+    q: { ca: "5. Quines són les dues estructures pròpies d'una cèl·lula procariota i quina és la seva funció?", es: "5. ¿Cuáles son las dos estructuras propias de una célula procariota y cuál es su función?" },
+    required: {
+      ca: [["flagel", "cua"], ["moviment"], ["pilis", "pèls"], ["fixar"]],
+      es: [["flagelo", "cola"], ["movimiento"], ["pilis", "pelos"], ["fijar", "adherir"]]
+    },
+    model: { ca: "El flagel permet el moviment i els pilis permeten fixar-se.", es: "El flagelo permite el movimiento y los pilis permiten fijarse." }
+  },
+  {
+    id: "e2-q6",
+    q: { ca: "6. Explica què és i què conté un ribosoma.", es: "6. Explica qué es y qué contiene un ribosoma." },
+    required: {
+      ca: [["dos subunitats", "dues subunitats"], ["arn"], ["proteines", "proteïnes"]],
+      es: [["dos subunidades"], ["arn"], ["proteinas", "proteínas"]]
+    },
+    model: { ca: "És format per dues subunitats i ARN al mig; sintetitza proteïnes.", es: "Está formado por dos subunidades y ARN en medio; sintetiza proteínas." }
+  },
+  {
+    id: "e2-q7",
+    q: { ca: "7. Diferencia el reticle endoplasmàtic rugós del reticle endoplasmàtic llis.", es: "7. Diferencia el retículo endoplasmático rugoso del retículo endoplasmático liso." },
+    required: {
+      ca: [["rer", "rugos", "rugós", "ribosomes"], ["emmagatzema proteines", "proteïnes"], ["rel", "llis"], ["lipids", "lípids"]],
+      es: [["rer", "rugoso", "ribosomas"], ["almacena proteinas", "proteínas"], ["rel", "liso"], ["lipidos", "lípidos"]]
+    },
+    model: { ca: "El RER té ribosomes i emmagatzema proteïnes; el REL sintetitza lípids.", es: "El RER tiene ribosomas y almacena proteínas; el REL sintetiza lípidos." }
+  },
+  {
+    id: "e2-q8",
+    q: { ca: "8. Quines són les funcions principals de l'aparell de Golgi?", es: "8. ¿Cuáles son las funciones principales del aparato de Golgi?" },
+    required: {
+      ca: [["sacs apilats", "cavitats apilades"], ["empaqueta", "empacar"], ["distribueix", "distribuir"], ["sucres"]],
+      es: [["sacos apilados", "cavidades apiladas"], ["empaqueta", "empacar"], ["distribuye", "distribuir"], ["azucares", "azúcares"]]
+    },
+    model: { ca: "Empaqueta i distribueix lípids i proteïnes i sintetitza sucres.", es: "Empaqueta y distribuye lípidos y proteínas y sintetiza azúcares." }
+  },
+  {
+    id: "e2-q9",
+    q: { ca: "9. Què contenen els lisosomes i quina és la seva funció?", es: "9. ¿Qué contienen los lisosomas y cuál es su función?" },
+    required: {
+      ca: [["vesicula", "vesícules"], ["enzims digestius", "enzims"], ["toxiques", "tòxiques", "destru"]],
+      es: [["vesicula", "vesículas"], ["enzimas digestivas", "enzimas"], ["toxicas", "tóxicas", "destru"]]
+    },
+    model: { ca: "Són vesícules amb enzims digestius que destrueixen substàncies tòxiques.", es: "Son vesículas con enzimas digestivas que destruyen sustancias tóxicas." }
+  },
+  {
+    id: "e2-q10",
+    q: { ca: "10. Com són i què contenen les vacúols d'una cèl·lula vegetal i d'una animal?", es: "10. ¿Cómo son y qué contienen las vacuolas de una célula vegetal y de una animal?" },
+    required: {
+      ca: [["vegetal", "planta"], ["una sola vacuol", "una vacuol gran", "vacuol molt gran"], ["aigua"], ["animal"], ["moltes vacuols", "varies vacuols"]],
+      es: [["vegetal", "planta"], ["una sola vacuola", "una vacuola grande"], ["agua"], ["animal"], ["muchas vacuolas", "varias vacuolas"]]
+    },
+    model: { ca: "La vegetal té una vacúol gran amb aigua; l'animal té moltes vacúols petites amb aigua i rebuigs.", es: "La vegetal tiene una vacuola grande con agua; la animal tiene muchas vacuolas pequeñas con agua y residuos." }
+  },
+  {
+    id: "e2-q11",
+    q: { ca: "11. Explica què és i quina és la funció principal del mitocondri.", es: "11. Explica qué es y cuál es la función principal de la mitocondria." },
+    required: {
+      ca: [["doble membrana", "dues membranes"], ["central respiratoria", "respiracio", "respiració"], ["energia", "atp"]],
+      es: [["doble membrana", "dos membranas"], ["central respiratoria", "respiracion", "respiración"], ["energia", "energía", "atp"]]
+    },
+    model: { ca: "És la central respiratòria de la cèl·lula i fabrica energia en forma d'ATP.", es: "Es la central respiratoria de la célula y fabrica energía en forma de ATP." }
+  },
+  {
+    id: "e2-q12",
+    q: { ca: "12. De què està format el citoesquelet?", es: "12. ¿De qué está formado el citoesqueleto?" },
+    required: {
+      ca: [["filaments"], ["microtubuls", "microtúbuls"]],
+      es: [["filamentos"], ["microtúbulos", "microtubulos"]]
+    },
+    model: { ca: "Està format per filaments i microtúbuls.", es: "Está formado por filamentos y microtúbulos." }
+  },
+  {
+    id: "e2-q13",
+    q: { ca: "13. Indica les dues estructures exclusives de la cèl·lula vegetal i la seva funció.", es: "13. Indica las dos estructuras exclusivas de la célula vegetal y su función." },
+    required: {
+      ca: [["paret cel·lular", "paret cellular"], ["rigidesa", "defensa", "defensa"], ["cloroplast"], ["fotosintesi", "fotosíntesi"]],
+      es: [["pared celular"], ["rigidez", "defensa"], ["cloroplasto"], ["fotosintesis", "fotosíntesis"]]
+    },
+    model: { ca: "La paret cel·lular dona rigidesa i defensa; els cloroplasts fan la fotosíntesi.", es: "La pared celular da rigidez y defensa; los cloroplastos hacen la fotosíntesis." }
+  },
+  {
+    id: "e2-q14",
+    q: { ca: "14. Com està estructurat un cloroplast i què passa a la seva grana?", es: "14. ¿Cómo está estructurado un cloroplasto y qué ocurre en su grana?" },
+    required: {
+      ca: [["doble membrana", "dues membranes"], ["grana"], ["clorofilla", "clorofil·la"], ["fotosintesi", "fotosíntesi"]],
+      es: [["doble membrana", "dos membranas"], ["grana"], ["clorofila"], ["fotosintesis", "fotosíntesis"]]
+    },
+    model: { ca: "Té doble membrana i grana; dins la grana hi ha clorofil·la i es realitza la fotosíntesi.", es: "Tiene doble membrana y grana; dentro de la grana hay clorofila y se realiza la fotosíntesis." }
+  },
+  {
+    id: "e2-q15",
+    q: { ca: "15. Com és una lent convergent i què fa amb els raigs de llum?", es: "15. ¿Cómo es una lente convergente y qué hace con los rayos de luz?" },
+    required: {
+      ca: [["gruixuda", "més gruixuda"], ["centre"], ["junta", "uneix", "convergeix"]],
+      es: [["gruesa", "más gruesa"], ["centro"], ["junta", "une", "converge"]]
+    },
+    model: { ca: "És més gruixuda al centre i convergeix els raigs de llum.", es: "Es más gruesa en el centro y converge los rayos de luz." }
+  },
+  {
+    id: "e2-q16",
+    q: { ca: "16. Com és una lent divergent i què fa amb els raigs de llum?", es: "16. ¿Cómo es una lente divergente y qué hace con los rayos de luz?" },
+    required: {
+      ca: [["estreta", "prima"], ["mig"], ["ampla", "extrems"], ["separa", "divergeix"]],
+      es: [["estrecha", "fina"], ["medio"], ["ancha", "extremos"], ["separa", "diverge"]]
+    },
+    model: { ca: "És estreta pel mig i ampla pels extrems i separa els raigs.", es: "Es estrecha por el medio y ancha por los extremos y separa los rayos." }
+  },
+  {
+    id: "e2-q17",
+    q: { ca: "17. Explica què és la hipermetropia, on es forma la imatge i amb quina lent es corregeix.", es: "17. Explica qué es la hipermetropía, dónde se forma la imagen y con qué lente se corrige." },
+    required: {
+      ca: [["hipermetropia"], ["no veure be de prop", "no veu bé de prop", "darrere"], ["retina"], ["convergent"]],
+      es: [["hipermetropia", "hipermetropía"], ["no ver bien de cerca", "detras", "detrás"], ["retina"], ["convergente"]]
+    },
+    model: { ca: "No es veu bé de prop perquè la imatge es forma darrere de la retina i es corregeix amb una lent convergent.", es: "No se ve bien de cerca porque la imagen se forma detrás de la retina y se corrige con una lente convergente." }
+  },
+  {
+    id: "e2-q18",
+    q: { ca: "18. Explica què és la miopia, on es forma la imatge i amb quina lent es corregeix.", es: "18. Explica qué es la miopía, dónde se forma la imagen y con qué lente se corrige." },
+    required: {
+      ca: [["miopia", "miopía"], ["no veure be de lluny", "no veu bé de lluny", "davant"], ["retina"], ["divergent"]],
+      es: [["miopia", "miopía"], ["no ver bien de lejos", "delante"], ["retina"], ["divergente"]]
+    },
+    model: { ca: "No es veu bé de lluny perquè la imatge es forma davant de la retina i es corregeix amb una lent divergent.", es: "No se ve bien de lejos porque la imagen se forma delante de la retina y se corrige con una lente divergente." }
+  },
+  {
+    id: "e2-q19",
+    q: { ca: "19. Quan es va inventar el microscopi òptic i qui el va inventar?", es: "19. ¿Cuándo se inventó el microscopio óptico y quién lo inventó?" },
+    required: {
+      ca: [["janssen"], ["1590"]],
+      es: [["janssen"], ["1590"]]
+    },
+    model: { ca: "Els germans Janssen el van inventar l'any 1590.", es: "Los hermanos Janssen lo inventaron en el año 1590." }
+  },
+  {
+    id: "e2-q20",
+    q: { ca: "20. Nombrar Hooke i Leeuwenhoek i explicar què va fer cadascun.", es: "20. Nombra a Hooke y Leeuwenhoek y explica qué hizo cada uno." },
+    required: {
+      ca: [["hooke"], ["1665"], ["cellules", "cèl·lules"], ["leeuwenhoek"], ["microorganismes"]],
+      es: [["hooke"], ["1665"], ["celulas", "células"], ["leeuwenhoek"], ["microorganismos"]]
+    },
+    model: { ca: "Hooke va descobrir les cèl·lules el 1665 i Leeuwenhoek va observar microorganismes.", es: "Hooke descubrió las células en 1665 y Leeuwenhoek observó microorganismos." }
+  },
+  {
+    id: "e2-q21",
+    q: { ca: "21. Explica les dues funcions principals de les lents convergents i divergents.", es: "21. Explica las dos funciones principales de las lentes convergentes y divergentes." },
+    required: {
+      ca: [["convergent", "junta", "converg"], ["divergent", "separa", "diverg"]],
+      es: [["convergente", "junta", "converg"], ["divergente", "separa", "diverg"]]
+    },
+    model: { ca: "La lent convergent junta els raigs i la divergent els separa.", es: "La lente convergente junta los rayos y la divergente los separa." }
+  },
+  {
+    id: "e2-q22",
+    q: { ca: "22. Explica la funció de l'ocular, el tub òptic i el revòlver.", es: "22. Explica la función del ocular, el tubo óptico y el revólver." },
+    required: {
+      ca: [["ocular"], ["mirar", "s'aproxima", "ubserva"], ["tub optic", "tub òptic"], ["connecta", "un"], ["revolver", "revòlver"], ["objectius"]],
+      es: [["ocular"], ["mirar", "observa"], ["tubo optico", "tubo óptico"], ["conecta", "une"], ["revolver", "revólver"], ["objetivos"]]
+    },
+    model: { ca: "L'ocular permet mirar i amplia; el tub uneix l'ocular i els objectius; el revòlver permet canviar els objectius.", es: "El ocular permite mirar y amplía; el tubo une el ocular y los objetivos; el revólver permite cambiar los objetivos." }
+  },
+  {
+    id: "e2-q23",
+    q: { ca: "23. Indica la funció de la platina, el diafragma i el braç del microscopi.", es: "23. Indica la función de la platina, el diafragma y el brazo del microscopio." },
+    required: {
+      ca: [["platina"], ["mostra"], ["diafragma"], ["llum"], ["braç"], ["subjectar", "sostenir"]],
+      es: [["platina"], ["muestra"], ["diafragma"], ["luz"], ["brazo"], ["sujetar", "sostener"]]
+    },
+    model: { ca: "La platina conté la mostra, el diafragma regula la llum i el braç subjecta el microscopi.", es: "La platina contiene la muestra, el diafragma regula la luz y el brazo sujeta el microscopio." }
+  },
+  {
+    id: "e2-q24",
+    q: { ca: "24. Diferencia el cargol macromètric del cargol micromètric.", es: "24. Diferencia el tornillo macrométrico del tornillo micrométrico." },
+    required: {
+      ca: [["macrometric", "macromètric"], ["rapid", "ràpid"], ["micrometric", "micromètric"], ["precisio", "precisió"]],
+      es: [["macrometrico", "macrométrico"], ["rapido", "rápido"], ["micrometrico", "micrométrico"], ["precision", "precisión"]]
+    },
+    model: { ca: "El macromètric enfoca ràpidament i el micromètric ajusta l'enfocament amb precisió.", es: "El macrométrico enfoca rápidamente y el micrométrico ajusta el enfoque con precisión." }
+  },
+  {
+    id: "e2-q25",
+    q: { ca: "25. Calcula els augments amb ocular x10 i objectiu x40. Després calcula'n un altre amb ocular x10 i objectiu x90.", es: "25. Calcula los aumentos con ocular x10 y objetivo x40. Después calcula otro con ocular x10 y objetivo x90." },
+    required: {
+      ca: [["400", "400x"], ["900", "900x"]],
+      es: [["400", "400x"], ["900", "900x"]]
+    },
+    model: { ca: "10 × 40 = 400x i 10 × 90 = 900x.", es: "10 × 40 = 400x y 10 × 90 = 900x." }
+  }
+];
+
 function normalizeText(str) {
   return str
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .trim();
+}
+
+function hasConcept(value, alternatives) {
+  return alternatives.some((text) => value.includes(normalizeText(text)));
+}
+
+function renderExamTwo(savedAnswers = {}) {
+  const container = document.getElementById("exam-two-container");
+  container.innerHTML = "";
+  const dict = uiStrings[currentLang];
+
+  examTwoData.forEach((item) => {
+    const block = document.createElement("div");
+    block.className = "open-question";
+
+    const label = document.createElement("label");
+    label.htmlFor = item.id;
+    label.textContent = item.q[currentLang];
+
+    const textarea = document.createElement("textarea");
+    textarea.id = item.id;
+    textarea.placeholder = dict.openPlaceholder;
+    textarea.value = savedAnswers[item.id] || "";
+    textarea.addEventListener("input", updateExamTwoProgress);
+
+    const feedback = document.createElement("div");
+    feedback.id = `fb-${item.id}`;
+    feedback.className = "open-feedback";
+
+    block.appendChild(label);
+    block.appendChild(textarea);
+    block.appendChild(feedback);
+    container.appendChild(block);
+  });
+
+  updateExamTwoProgress();
+}
+
+function updateExamTwoProgress() {
+  const answered = examTwoData.filter((item) =>
+    document.getElementById(item.id).value.trim() !== ""
+  ).length;
+  const pct = Math.round((answered / examTwoData.length) * 100);
+  document.getElementById("exam-two-progress").style.width = `${pct}%`;
+}
+
+function checkExamTwo() {
+  let points = 0;
+  let maxPoints = 0;
+  const mistakes = [];
+  const dict = uiStrings[currentLang];
+
+  examTwoData.forEach((item) => {
+    const textarea = document.getElementById(item.id);
+    const feedback = document.getElementById(`fb-${item.id}`);
+    const value = normalizeText(textarea.value);
+    const groups = item.required[currentLang];
+    let matched = 0;
+
+    groups.forEach((alternatives) => {
+      if (hasConcept(value, alternatives)) matched++;
+    });
+
+    maxPoints += groups.length;
+    points += matched;
+    textarea.classList.remove("correct", "partial", "wrong");
+    feedback.className = "open-feedback show";
+
+    if (matched === groups.length) {
+      textarea.classList.add("correct");
+      feedback.classList.add("correct");
+      feedback.textContent = currentLang === "ca"
+        ? "✓ Resposta completa."
+        : "✓ Respuesta completa.";
+    } else if (matched > 0) {
+      textarea.classList.add("partial");
+      feedback.classList.add("partial");
+      feedback.textContent = (currentLang === "ca" ? "◐ Resposta parcial. " : "◐ Respuesta parcial. ") +
+        (currentLang === "ca" ? "Resposta model: " : "Respuesta modelo: ") +
+        item.model[currentLang];
+      mistakes.push(`${item.q[currentLang]} — ${item.model[currentLang]}`);
+    } else {
+      textarea.classList.add("wrong");
+      feedback.classList.add("wrong");
+      feedback.textContent = (currentLang === "ca" ? "✗ Resposta per revisar. " : "✗ Respuesta por revisar. ") +
+        (currentLang === "ca" ? "Resposta model: " : "Respuesta modelo: ") +
+        item.model[currentLang];
+      mistakes.push(`${item.q[currentLang]} — ${item.model[currentLang]}`);
+    }
+  });
+
+  const grade = maxPoints === 0 ? 0 : (points / maxPoints) * 10;
+  const finalGrade = grade.toFixed(1);
+  const results = document.getElementById("exam-two-results");
+  results.classList.remove("hidden");
+  document.getElementById("exam-two-score").textContent = finalGrade;
+
+  const message = document.getElementById("exam-two-score-message");
+  if (grade >= 9) {
+    message.textContent = dict.msg9;
+  } else if (grade >= 7) {
+    message.textContent = dict.msg7;
+  } else if (grade >= 5) {
+    message.textContent = dict.msg5;
+  } else {
+    message.textContent = dict.msg0;
+  }
+
+  const summary = document.getElementById("exam-two-mistakes");
+  if (mistakes.length === 0) {
+    summary.innerHTML = `<p style="color:#15803d;font-weight:600;text-align:center;">${dict.noMistakes}</p>`;
+  } else {
+    let html = `<h3>${dict.mistakesHeading(mistakes.length)}</h3><ul>`;
+    mistakes.forEach((mistake) => {
+      html += `<li>${mistake}</li>`;
+    });
+    html += "</ul>";
+    summary.innerHTML = html;
+  }
+
+  results.scrollIntoView({ behavior: "smooth" });
+}
+
+function resetExamTwo() {
+  examTwoData.forEach((item) => {
+    const textarea = document.getElementById(item.id);
+    const feedback = document.getElementById(`fb-${item.id}`);
+    textarea.value = "";
+    textarea.className = "";
+    feedback.className = "open-feedback";
+    feedback.textContent = "";
+  });
+  document.getElementById("exam-two-progress").style.width = "0%";
+  document.getElementById("exam-two-results").classList.add("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function switchExam(exam) {
+  const first = document.getElementById("exam-one");
+  const second = document.getElementById("exam-two");
+  const tabOne = document.getElementById("tab-exam-one");
+  const tabTwo = document.getElementById("tab-exam-two");
+
+  first.classList.toggle("hidden", exam !== "one");
+  second.classList.toggle("hidden", exam !== "two");
+  tabOne.classList.toggle("active", exam === "one");
+  tabTwo.classList.toggle("active", exam === "two");
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function applyStaticTranslations() {
@@ -763,11 +1155,18 @@ function toggleLanguage() {
     if (val !== "") savedMatching[item.id] = val;
   });
 
+  const savedExamTwo = {};
+  examTwoData.forEach((item) => {
+    const val = document.getElementById(item.id).value;
+    if (val !== "") savedExamTwo[item.id] = val;
+  });
+
   currentLang = currentLang === "ca" ? "es" : "ca";
 
   applyStaticTranslations();
   renderQuiz(savedSelections);
   renderMatching(savedMatching);
+  renderExamTwo(savedExamTwo);
 
   if (isCorrected) {
     checkExam(false);
@@ -793,10 +1192,15 @@ document.addEventListener("DOMContentLoaded", () => {
   applyStaticTranslations();
   renderQuiz();
   renderMatching();
+  renderExamTwo();
   shortChecks.forEach((sc) => {
     document.getElementById(sc.id).addEventListener("input", updateProgress);
   });
   document.getElementById("btn-lang").addEventListener("click", toggleLanguage);
   document.getElementById("btn-check").addEventListener("click", () => checkExam(true));
   document.getElementById("btn-reset").addEventListener("click", resetExam);
+  document.getElementById("btn-check-two").addEventListener("click", checkExamTwo);
+  document.getElementById("btn-reset-two").addEventListener("click", resetExamTwo);
+  document.getElementById("tab-exam-one").addEventListener("click", () => switchExam("one"));
+  document.getElementById("tab-exam-two").addEventListener("click", () => switchExam("two"));
 });

@@ -23,7 +23,12 @@
       </div>
     </header>
 
-    <main>
+      <nav class="exam-tabs" aria-label="Examens">
+        <button id="tab-exam-one" class="exam-tab active" type="button" data-i18n="tabExamOne">Examen 1</button>
+        <button id="tab-exam-two" class="exam-tab" type="button" data-i18n="tabExamTwo">Examen 2</button>
+      </nav>
+
+      <main id="exam-one">
       <!-- BLOC 1 -->
       <section class="card">
         <h2 data-i18n="b1Title">Bloc 1: Preguntes tipus test</h2>
@@ -89,6 +94,30 @@
         <div id="mistakes-summary"></div>
       </section>
     </main>
+
+    <section id="exam-two" class="hidden" aria-labelledby="exam-two-title">
+      <div class="card">
+        <h2 id="exam-two-title" data-i18n="examTwoTitle">Examen 2: Preguntes obertes</h2>
+        <p class="section-desc" data-i18n="examTwoDesc">Respon amb les teves paraules. Pots escriure en català o castellà.</p>
+        <div id="exam-two-progress-container" class="progress-bar-container exam-two-progress">
+          <div id="exam-two-progress" class="progress-bar"></div>
+        </div>
+        <div id="exam-two-container"></div>
+        <div class="actions">
+          <button id="btn-check-two" class="btn-primary" type="button" data-i18n="btnCheckTwo">Corregir Examen 2</button>
+          <button id="btn-reset-two" class="btn-secondary" type="button" data-i18n="btnResetTwo">Esborrar respostes</button>
+        </div>
+      </div>
+
+      <section id="exam-two-results" class="card results hidden">
+        <h2 data-i18n="examTwoResTitle">Resultats de l'Examen 2</h2>
+        <div class="score-box">
+          <span id="exam-two-score">0</span> / 10
+        </div>
+        <p id="exam-two-score-message"></p>
+        <div id="exam-two-mistakes"></div>
+      </section>
+    </section>
   </div>
 
   <script src="script.js"></script>
